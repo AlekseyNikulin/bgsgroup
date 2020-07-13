@@ -6,17 +6,15 @@ docker-compose build
 
 docker-compose up -d
 
-docker exec -it php7.4-fpm bash -c "cd ./bgsgroup/app/ && php -r \"copy('https://getcomposer.org/installer\', 'composer-setup.php');\" && php composer-setup.php"
+docker exec -it php7.4-fpm bash -c "cd ./bgsgroup/app/ && php -r \"copy('https://getcomposer.org/installer', 'composer-setup.php');\" && php composer-setup.php"
 
-docker exec -it php7.4-fpm php ./bgsgroup/app/composer.phar install
+docker exec -it php7.4-fpm bash -c "cd bgsgroup/app && php composer.phar install"
 
-docker exec -it php7.4-fpm php ./bgsgroup/app/composer.phar dump-autoload
+docker exec -it php7.4-fpm bash -c "cd bgsgroup/app && php composer.phar dump-autoload"
 
-docker exec -it php7.4-fpm php ./bgsgroup/app/artisan db:create
+docker exec -it php7.4-fpm bash -c "cd bgsgroup/app && cp .env.example .env && php artisan db:create"
 
-docker exec -it php7.4-fpm php ./bgsgroup/app/artisan migrate
-
-docker exec -it php7.4-fpm php ./bgsgroup/app/artisan db:seed
+docker exec -it php7.4-fpm  bash -c "cd bgsgroup/app && php artisan migrate && php artisan db:seed"
 
 ```
 
