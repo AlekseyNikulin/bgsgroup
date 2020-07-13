@@ -1,0 +1,96 @@
+version: '3.1'
+
+services:
+  nginx:
+    hostname: nginx
+    container_name: nginx
+    build: ./resource/docker/nginx/
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - php:php
+      - mysql:mysql
+      - redis:redis
+    volumes:
+      - ./:/var/www/bgsgroup
+      - ./resource/docker/nginx/www:/usr/share/nginx/html
+      - ./log/docker:/var/log/nginx
+    networks:
+      - frontend
+      - backend
+
+  php:
+    hostname: php
+    container_name: php7.4-fpm
+    build: ./resource/docker/php7.4-fpm/
+    restart: always
+    ports:
+      - "9000:9000"
+    links:
+      - redis:redis
+    volumes:
+      - ./:/var/www/bgsgroup:cached
+      - ./resource/docker/nginx/www:/usr/share/nginx/html:cached
+      - ./log/docker:/var/log
+    networks:
+      - backend
+
+  mysql:
+    hostname: mysql
+    container_name: mysql8.0
+    image: mysql:8.0
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./resource/sql:/tmp/sql
+      - ./resource/docker/mysql/data:/var/lib/mysql
+      - ./resource/docker/mysql/config:/etc/mysql/conf.d
+      - ./log/docker:/var/log/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      # MYSQL_DATABASE:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_READ_BUFFER_SIZE: 2M
+      MYSQL_SORT_BUFFER_SIZE: 2M
+      MYSQL_KEY_BUFFER_SIZE: 64M
+    networks:
+      - backend
+
+  phpmyadmin:
+          container_name: phpmyadmin
+          image: phpmyadmin/phpmyadmin
+          ports:
+            - "8081:80"
+          links:
+            - mysql:mysql
+          environment:
+            PMA_HOST: mysql
+            PMA_PORT: 3306
+            PMA_USER: root
+            PMA_PASSWORD: secret
+            PMA_USER_CONFIG_BASE64: ./resource/docker/phpmyadmin/config.inc.php.base64
+            UPLOAD_LIMIT: 64M
+            MYSQL_USERNAME: root
+            MYSQL_ROOT_PASSWORD: secret
+          networks:
+            - backend
+          depends_on:
+            - mysql
+
+  redis:
+      hostname: redis
+      container_name: redis
+      image: redis:5-alpine
+      ports:
+        - 6379:6379
+      networks:
+        - backend
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
