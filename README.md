@@ -14,7 +14,7 @@ docker exec -it php7.4-fpm bash -c "cd bgsgroup/app && php composer.phar dump-au
 
 docker exec -it php7.4-fpm bash -c "cd bgsgroup/app && cp .env.example .env && php artisan db:create"
 
-docker exec -it php7.4-fpm  bash -c "cd bgsgroup/app && php artisan migrate && php artisan db:seed"
+docker exec -it php7.4-fpm bash -c "cd bgsgroup/app && php artisan migrate && php artisan db:seed"
 
 ```
 
