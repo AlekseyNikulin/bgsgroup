@@ -1,0 +1,14 @@
+{
+    "name": "anim/bgsgroup",
+    "description": "v1.0",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ANIM",
+            "email": "lex-nik1@narod.ru"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
