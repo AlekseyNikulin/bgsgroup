@@ -102,7 +102,7 @@ curl --location --request POST 'http://bgsgroup/api/events/4/user/create' \
 Удаление участника из мероприятия.
 
 ```bash
-curl --location --request DELETE 'http://bgsgroup/api/events/1/user/3/delete' \
+curl --location --request DELETE 'http://bgsgroup/api/events/1/user/3' \
 --header 'x-api-key: {your_api_key}'
 ```
 

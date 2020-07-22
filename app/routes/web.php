@@ -28,7 +28,7 @@ $router->group(['prefix'=>'api','middleware' => 'access-api-key'], function () u
 
     $router->get('events/user/show','Events\\UsersEventsController@show');
 
-    $router->delete('events/{event_id}/user/{user_id}/delete','Events\\UsersEventsController@delete');
+    $router->delete('events/{event_id}/user/{user_id}','Events\\UsersEventsController@delete');
 
     $router->post('events/{event_id}/user/{user_id}/update','Events\\UsersEventsController@update');
 
